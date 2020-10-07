@@ -19,4 +19,7 @@ div.square {
     width: 150px;
     height: 150px;
     box-shadow: 0 0 0 5px black;
+    text-align: center;
+    justify-content: center;
+    font-size: x-large;
 }
