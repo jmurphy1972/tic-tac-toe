@@ -34,9 +34,12 @@ for (let i=0; i<NUMBER_OF_SQUARES; i++) {
             }
 
             if (boardFull()) {
+                if (boardInPlay) {
+                    console.log("There is NO winner");
+                    indicateNoWinner();
+                }
+
                 boardInPlay = false;
-                console.log("There is NO winner");
-                indicateNoWinner();
             }
 
         }
@@ -101,7 +104,41 @@ function checkBoard(index) {
             console.log(winFlag)
             return true;
         }
-    }   
+    }
+
+    //check \ diag
+    winFlag = true;
+    for (let i=LENGTH_OF_SIDE+1; i<NUMBER_OF_SQUARES; i+=LENGTH_OF_SIDE+1) {
+        if ((playerBoard[i-(LENGTH_OF_SIDE+1)] == '') || (playerBoard[i] == '')) {
+            winFlag = false;
+        }
+        else if ((playerBoard[i] != playerBoard[i-(LENGTH_OF_SIDE+1)])) {
+            winFlag = false;
+        }
+    }
+
+    if (winFlag) {
+        console.log(winFlag)
+        return true;
+    }
+
+    //check / diag
+    winFlag = true;
+    for (let i=LENGTH_OF_SIDE+1; i<NUMBER_OF_SQUARES-1; i+=LENGTH_OF_SIDE-1) {
+        console.log(`i is ${i}`);
+
+        if ((playerBoard[i-(LENGTH_OF_SIDE-1)] == '') || (playerBoard[i] == '')) {
+            winFlag = false;
+        }
+        else if ((playerBoard[i] != playerBoard[i-(LENGTH_OF_SIDE-1)])) {
+            winFlag = false;
+        }
+    }
+
+    if (winFlag) {
+        console.log(winFlag)
+        return true;
+    }
 
     console.log(winFlag);
     return winFlag;
