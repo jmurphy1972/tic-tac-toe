@@ -44,7 +44,24 @@ for (let i=0; i<NUMBER_OF_SQUARES; i++) {
 
         }
     });
-} 
+}
+
+let playAgainButtonObj = document.querySelector('#playAgainButton');
+
+
+playAgainButtonObj.addEventListener('click', () => {
+    console.log('Play Again Button clicked');
+    
+    initializeArray();
+    for (let i=0; i<playerBoard.length; i++) {
+        playerBoard[i] = '';
+        boardObj[i].innerHTML = '';
+    }
+    turn = 'X';
+    updateTurnIndicator();
+    boardInPlay = true;
+});
+
 
 function init() {
     let turnIndicator = document.querySelector('#turnIndicator');
@@ -163,12 +180,15 @@ function switchTurn() {
 
 function updateTurnIndicator() {
     turnIndicator.innerHTML = `Player's Turn: ${turn}`;
+    turnIndicator.style.color = 'black';
 }
 
 function indicateWinner() {
     turnIndicator.innerHTML = `Winner is: ${turn}`;
+    turnIndicator.style.color = 'red';
 }
 
 function indicateNoWinner() {
     turnIndicator.innerHTML = `There is NO winner!!!`;
+    turnIndicator.style.color = 'red';
 }

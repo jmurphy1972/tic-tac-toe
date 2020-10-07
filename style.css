@@ -25,22 +25,99 @@ div.square {
     font-size: xx-large;
 }
 
-div.squareCT {
+div.squareUL {
     width: 150px;
     height: 150px;
-    box-shadow: 0px 8px 10px black, 
-    -10px 8px 15px black, 10px 8px 15px black;
+    border: solid #000;
+    border-width: 0 4px 4px 0;
     text-align: center;
     text-justify: auto;
     justify-content: center;
     font-size: xx-large;
 }
 
-div.squareUL {
+div.squareUC {
     width: 150px;
     height: 150px;
-    box-shadow: 0px 8px 10px black, 
-    -10px 8px 15px black, 10px 8px 15px black;
+    border: solid #000;
+    border-width: 0 4px 4px 4px;
+    text-align: center;
+    text-justify: auto;
+    justify-content: center;
+    font-size: xx-large;
+}
+
+div.squareUR {
+    width: 150px;
+    height: 150px;
+    border: solid #000;
+    border-width: 0 0 4px 4px;
+    text-align: center;
+    text-justify: auto;
+    justify-content: center;
+    font-size: xx-large;
+}
+
+div.squareCL {
+    width: 150px;
+    height: 150px;
+    border: solid #000;
+    border-width: 4px 4px 4px 0;
+    text-align: center;
+    text-justify: auto;
+    justify-content: center;
+    font-size: xx-large;
+}
+
+div.squareCC {
+    width: 150px;
+    height: 150px;
+    border: solid #000;
+    border-width: 4px 4px 4px 4px;
+    text-align: center;
+    text-justify: auto;
+    justify-content: center;
+    font-size: xx-large;
+}
+
+div.squareCR {
+    width: 150px;
+    height: 150px;
+    border: solid #000;
+    border-width: 4px 0 4px 4px;
+    text-align: center;
+    text-justify: auto;
+    justify-content: center;
+    font-size: xx-large;
+}
+
+div.squareLL {
+    width: 150px;
+    height: 150px;
+    border: solid #000;
+    border-width: 4px 4px 0 0;
+    text-align: center;
+    text-justify: auto;
+    justify-content: center;
+    font-size: xx-large;
+}
+
+div.squareLC {
+    width: 150px;
+    height: 150px;
+    border: solid #000;
+    border-width: 4px 4px 0 4px;
+    text-align: center;
+    text-justify: auto;
+    justify-content: center;
+    font-size: xx-large;
+}
+
+div.squareLR {
+    width: 150px;
+    height: 150px;
+    border: solid #000;
+    border-width: 4px 0 0 4px;
     text-align: center;
     text-justify: auto;
     justify-content: center;
