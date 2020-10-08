@@ -10,30 +10,42 @@
     <header class="header">
         <h1>Tic-Tac-Toe</h1>
         <h2 id="turnIndicator">Player's Turn</h2>
+        <div class="scores">
+            <div class="scorePair">
+                <div class="scoreTitle" id="TitleforX">Games Won By X:  </div>
+                <div class="score" id="CountforX">0</div>
+            </div>
+            <div class="scorePair">
+                <div class="scoreTitle" id="TitleforDraw">Games at Draw:  </div>
+                <div class="score" id="CountforDraw">0</div>
+            </div>
+            <div class="scorePair">
+                <div class="scoreTitle" id="TitleforO">Games Won By O:  </div>
+                <div class="score" id="CountforO">0</div>
+            </div>
+        </div>
     </header>
     
     <section class="layout">
+        <section class="row">
+            <div class="squareUL" id="square0"></div>
+            <div class="squareUC" id="square1"></div>
+            <div class="squareUR" id="square2"></div>
+        </section>
+        <section class="row">
+            <div class="squareCL" id="square3"></div>
+            <div class="squareCC" id="square4"></div>
+            <div class="squareCR" id="square5"></div>
+        </section>
+        <section class="row">
+            <div class="squareLL" id="square6"></div>
+            <div class="squareLC" id="square7"></div>
+            <div class="squareLR" id="square8"></div>
+        </section>
 
-    <section class="row">
-        <div class="squareUL" id="square0"></div>
-        <div class="squareUC" id="square1"></div>
-        <div class="squareUR" id="square2"></div>
-    </section>
-    <section class="row">
-        <div class="squareCL" id="square3"></div>
-        <div class="squareCC" id="square4"></div>
-        <div class="squareCR" id="square5"></div>
-    </section>
-    <section class="row">
-        <div class="squareLL" id="square6"></div>
-        <div class="squareLC" id="square7"></div>
-        <div class="squareLR" id="square8"></div>
-    </section>
-
-    <section class = "buttons">
-        <button id="playAgainButton">Play Again</button>
-    </section>
-
+        <section class = "buttons">
+            <button id="playAgainButton">Play Again</button>
+        </section>
     </section>
 
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>

@@ -4,10 +4,17 @@ console.log('connected');
 
 let LENGTH_OF_SIDE = 3;
 let NUMBER_OF_SQUARES = LENGTH_OF_SIDE * LENGTH_OF_SIDE;
-let turn = 'X';
+let turn;
 let boardObj = [];
 let playerBoard = [];
 let boardInPlay = true;
+
+let scoreX = 0;
+let scoreO = 0;
+let scoreDraw = 0;
+
+let countXObj;
+let countOObj;
 
 init();
 
@@ -51,22 +58,23 @@ let playAgainButtonObj = document.querySelector('#playAgainButton');
 
 playAgainButtonObj.addEventListener('click', () => {
     console.log('Play Again Button clicked');
-    
-    initializeArray();
-    for (let i=0; i<playerBoard.length; i++) {
-        playerBoard[i] = '';
-        boardObj[i].innerHTML = '';
-    }
-    turn = 'X';
-    updateTurnIndicator();
-    boardInPlay = true;
+    init();
 });
 
 
 function init() {
-    let turnIndicator = document.querySelector('#turnIndicator');
-    turnIndicator.innerHTML = `Player's Turn: ${turn}`;
+    for (let i=0; i<playerBoard.length; i++) {
+        playerBoard[i] = '';
+        boardObj[i].innerHTML = '';
+    }
+
     initializeArray();
+    turn = 'X';
+    updateTurnIndicator();
+    boardInPlay = true;
+
+    countXObj = document.querySelector('#CountforX');
+    countOObj = document.querySelector('#CountforO');
 }
 
 function boardFull() {
@@ -142,7 +150,6 @@ function checkBoard(index) {
     //check / diag
     winFlag = true;
     for (let i=LENGTH_OF_SIDE+1; i<NUMBER_OF_SQUARES-1; i+=LENGTH_OF_SIDE-1) {
-        console.log(`i is ${i}`);
 
         if ((playerBoard[i-(LENGTH_OF_SIDE-1)] == '') || (playerBoard[i] == '')) {
             winFlag = false;
@@ -153,11 +160,9 @@ function checkBoard(index) {
     }
 
     if (winFlag) {
-        console.log(winFlag)
         return true;
     }
 
-    console.log(winFlag);
     return winFlag;
 }
 
@@ -184,11 +189,20 @@ function updateTurnIndicator() {
 }
 
 function indicateWinner() {
-    turnIndicator.innerHTML = `Winner is: ${turn}`;
-    turnIndicator.style.color = 'red';
+    turnIndicator.innerHTML = `Winner is: ${turn}!!!`;
+    turnIndicator.style.color = 'green';
+
+    if (turn == 'X') {
+        scoreX++;
+        countXObj.innerHTML = scoreX;
+    }
+    else if (turn == 'O') {
+        scoreO++;
+        countOObj.innerHTML = scoreO;
+    }
 }
 
 function indicateNoWinner() {
-    turnIndicator.innerHTML = `There is NO winner!!!`;
+    turnIndicator.innerHTML = `It's a DRAW ... There is NO winner`;
     turnIndicator.style.color = 'red';
 }

@@ -6,6 +6,32 @@ h2 {
     text-align: center;
 }
 
+div.scores {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+div.scorePair {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin: 0 0 10px 0;
+}
+
+div.scoreTitle {
+    text-align: center;
+    color: blue;
+    margin: 10px;
+}
+
+div.score {
+    text-align: center;
+    color: limegreen;
+    font-weight: bold;
+    margin: 10px;
+}
+
 section.row {
     line-height: 140px;
     text-align: center;
