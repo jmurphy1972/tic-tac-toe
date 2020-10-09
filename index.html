@@ -11,16 +11,20 @@
         <h1>Tic-Tac-Toe</h1>
         <h2 id="turnIndicator">Player's Turn</h2>
         <div class="scores">
-            <div class="scorePair">
-                <div class="scoreTitle" id="titleforX">Games Won By X:  </div>
+            <div class="scorePair" id="scoreGroupX">
+                <div class="scoreTitle" id="titleforX">Games Won By </div>
+                <div class="scoreName" id="nameforX">X</div>
+                <div class="scoreColon" id="colon">:</div>
                 <div class="score" id="CountforX">0</div>
             </div>
             <div class="scorePair">
                 <div class="scoreTitle" id="titleforDraw">Games End At Draw:  </div>
                 <div class="score" id="CountforDraw">0</div>
             </div>
-            <div class="scorePair">
-                <div class="scoreTitle" id="titleforO">Games Won By O:  </div>
+            <div class="scorePair" id="scoreGroupO">
+                <div class="scoreTitle" id="titleforO">Games Won By </div>
+                <div class="scoreName" id="nameforO">O</div>
+                <div class="scoreColon" id="colon">:</div>
                 <div class="score" id="CountforO">0</div>
             </div>
         </div>
@@ -46,7 +50,7 @@
         <section class = "buttons">
             <button class="customButton" id="customX">Customize X Token</button>
             <button class="gameButton"id="playAgainButton">Play Again</button>
-            <button class="gameButton"id="resetButton">Reset</button>
+            <button class="gameButton"id="resetButton">Reset to Factory Settings</button>
             <button class="customButton" id="customO">Customize O Token</button>
         </section>
     </section>

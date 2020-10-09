@@ -24,8 +24,8 @@ let resetButtonObj = document.querySelector('#resetButton');
 let customXObj = document.querySelector('#customX');
 let customOObj = document.querySelector('#customO');
 
-let titleXObj = document.querySelector('#titleforX');
-let titleOObj = document.querySelector('#titleforO');
+let nameforX = document.querySelector('#nameforX');
+let nameforO = document.querySelector('#nameforO');
 
 let countXObj = document.querySelector('#CountforX');
 let countOObj = document.querySelector('#CountforO');
@@ -98,8 +98,7 @@ resetButtonObj.addEventListener('click', () => {
     console.log('Reset button clicked');
 
     turn = 'X';
-    localStorage.setItem('turn', turn);
-    updateTurnIndicator();
+    updateKey('turn', turn);
 
     for (let i=0; i<NUMBER_OF_SQUARES; i++) {
         playerBoard[i] = '';
@@ -118,26 +117,42 @@ resetButtonObj.addEventListener('click', () => {
 
     scoreDraw = 0;
     updateKeyAndObj('scoreDraw', scoreDraw, countforDraw);
+
+    tokenX = 'X';
+    updateKeyAndObj('tokenX', 'X', nameforX);
+    tokenO = 'O';
+    updateKeyAndObj('tokenO', 'O', nameforO);
+
+    updateTurnIndicator();
+    refreshBoard();
 });
 
 
 customXObj.addEventListener('click', () => {
-//    modalObj.style.display = 'block';
-    let answer = prompt("What is the X token?");
-    tokenX = answer;
-    titleXObj.innerHTML = `Games Won By ${tokenX}: `;
-    console.log(tokenX);
+    let answer = prompt("What is the X token? (max 8 char) ");
+    if (answer == null) {
+        answer = tokenX;
+    }
+
+    tokenX = answer.substring(0, 8);
+    updateKeyAndObj('tokenX', tokenX, nameforX);
     refreshBoard();
+
+    updateTurnIndicator();
 });
 
 customOObj.addEventListener('click', () => {
-//    modalObj.style.display = 'block';
-    let answer = prompt("What is the O token?");
-    tokenO = answer;
-    titleOObj.innerHTML = `Games Won By ${tokenO}: `;
-    console.log(tokenO);
+    let answer = prompt("What is the O token? (max 8 char) ");
+    if (answer == null) {
+        answer = tokenO;
+    }
+
+    tokenO = answer.substring(0, 8);
+    updateKeyAndObj('tokenO', tokenO, nameforO);
     refreshBoard();
-    });
+
+    updateTurnIndicator();
+});
 
 
 function init() {
@@ -169,7 +184,25 @@ function init() {
             updateKey(`sq${i}`, playerBoard[i]);
         }
     }
+
+    if (localStorage.getItem('tokenX')) {
+        tokenX = localStorage.getItem('tokenX');
+    }
+    else {
+        tokenX = 'X';
+    }
+    updateKeyAndObj('tokenX', tokenX, nameforX);
+
+    if (localStorage.getItem('tokenO')) {
+        tokenO = localStorage.getItem('tokenO');
+    }
+    else {
+        tokenO = 'O';
+    }
+    updateKeyAndObj('tokenO', tokenO, nameforO);
+
     refreshBoard();
+
     
     if (localStorage.getItem('boardInPlay') == 'true') {
         boardInPlay = true;

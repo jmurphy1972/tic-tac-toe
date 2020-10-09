@@ -22,14 +22,25 @@ div.scorePair {
 div.scoreTitle {
     text-align: center;
     color: blue;
-    margin: 5px;
+}
+
+div.scoreTitle {
+    margin: 0 5px 0 0;
+}
+
+div.scoreName {
+    color: blue;
+}
+
+div.scoreColon {
+    margin: 0 5px 0 0;
+    color: blue;
 }
 
 div.score {
     text-align: center;
     color: limegreen;
     font-weight: bold;
-    margin: 5px;
 }
 
 section.layout {
@@ -146,11 +157,6 @@ div.squareLR {
     font-size: xx-large;
 }
 
-section.layout {
-    display: flex;
-    flex-direction: column;
-}
-
 section.buttons {
     display: flex;
     flex-direction: row;
@@ -246,5 +252,25 @@ button.customButton {
 
     button#resetButton {
         order: -1;
+    }
+
+    div#scoreGroupX {
+        order: -1;
+    }
+
+    div#scoreGroupO {
+        order: -1;
+    }
+
+    h1 {
+        margin: 0 0 0 0;
+    }
+
+    h2 {
+        margin: 0 0 0 0;
+    }
+
+    section.layout {
+        margin: 10px 0 0 0;
     }
 }
