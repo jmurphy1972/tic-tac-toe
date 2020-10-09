@@ -86,11 +86,11 @@ playAgainButtonObj.addEventListener('click', () => {
 
     initializeArray();
     turn = 'X';
-    localStorage.setItem('turn', turn);
+    updateKey('turn', turn);
     updateTurnIndicator();
 
     boardInPlay = true;
-    localStorage.setItem('boardInPlay', boardInPlay);
+    updateKey('boardInPlay', boardInPlay);
 });
 
 
@@ -129,30 +129,40 @@ resetButtonObj.addEventListener('click', () => {
 
 
 customXObj.addEventListener('click', () => {
-    let answer = prompt("What is the X token? (max 8 char) ");
-    if (answer == null) {
-        answer = tokenX;
-    }
+   tokenX = customToken('X', 'tokenX', tokenX, nameforX);
+   refreshBoard();
 
-    tokenX = answer.substring(0, 8);
-    updateKeyAndObj('tokenX', tokenX, nameforX);
-    refreshBoard();
-
+   if (indicatorState == 'inPlay') {
     updateTurnIndicator();
+   }
+   else if (indicatorState == 'win') {
+    updateWinnerIndicator();
+   }
 });
 
 customOObj.addEventListener('click', () => {
-    let answer = prompt("What is the O token? (max 8 char) ");
+   tokenO = customToken('O', 'tokenO', tokenO, nameforO);
+   refreshBoard();
+   
+   if (indicatorState == 'inPlay') {
+    updateTurnIndicator();
+   }
+   else if (indicatorState == 'win') {
+    updateWinnerIndicator();
+   }
+});
+
+function customToken(player, key, value, htmlObj) {
+    let answer = prompt(`What is the ${player} token? (max 8 char) `);
     if (answer == null) {
-        answer = tokenO;
+        answer = value;
     }
 
-    tokenO = answer.substring(0, 8);
-    updateKeyAndObj('tokenO', tokenO, nameforO);
-    refreshBoard();
+    value = answer.substring(0, 8);
+    updateKeyAndObj(key, value, htmlObj);
 
-    updateTurnIndicator();
-});
+    return value;
+}
 
 
 function init() {
@@ -180,40 +190,15 @@ function init() {
         }
         else {
             playerBoard[i] = '';
-            // localStorage.setItem(`sq${i}`, playerBoard[i]);
             updateKey(`sq${i}`, playerBoard[i]);
         }
     }
 
-    if (localStorage.getItem('tokenX')) {
-        tokenX = localStorage.getItem('tokenX');
-    }
-    else {
-        tokenX = 'X';
-    }
-    updateKeyAndObj('tokenX', tokenX, nameforX);
-
-    if (localStorage.getItem('tokenO')) {
-        tokenO = localStorage.getItem('tokenO');
-    }
-    else {
-        tokenO = 'O';
-    }
-    updateKeyAndObj('tokenO', tokenO, nameforO);
-
+    tokenX = getStringFromStorageWithDefault('tokenX', tokenX, nameforX, 'X');
+    tokenO = getStringFromStorageWithDefault('tokenO', tokenO, nameforO, 'O');
     refreshBoard();
 
-    
-    if (localStorage.getItem('boardInPlay') == 'true') {
-        boardInPlay = true;
-    }
-    else if (localStorage.getItem('boardInPlay') == 'false') {
-        boardInPlay = false;
-    }
-    else {
-        boardInPlay = true;
-        localStorage.setItem('boardInPlay', boardInPlay);
-    }
+    boardInPlay = getBooleanFromStorageWithDefault('boardInPlay', true);
 
     indicatorState = localStorage.getItem('indicatorState');
     console.log(`indicatorState is ${indicatorState}`);
@@ -232,31 +217,48 @@ function init() {
         updateTurnIndicator();
     }
 
+    scoreX = getIntFromStorageWithDefault('scoreX', scoreX, countXObj, 0);
+    scoreO = getIntFromStorageWithDefault('scoreO', scoreO, countOObj, 0);
+    scoreDraw = getIntFromStorageWithDefault('scoreDraw', scoreDraw, countforDraw, 0);
+}
 
-    if (localStorage.getItem('scoreX')) {
-        scoreX = parseInt(localStorage.getItem('scoreX'), 10);
+function getBooleanFromStorageWithDefault(key, def) {
+    let value;
+
+    if (localStorage.getItem(key) == 'true') {
+        value = true;
+    }
+    else if (localStorage.getItem(key) == 'false') {
+        value = false;
     }
     else {
-        scoreX = 0;
+        value = def;
+        localStorage.setItem(key, value);
     }
-    updateKeyAndObj('scoreX', scoreX, countXObj);
 
-    if (localStorage.getItem('scoreO')) {
-        scoreO = parseInt(localStorage.getItem('scoreO'), 10);
+    return value;
+}
+
+function getStringFromStorageWithDefault(key, value, htmlObj, def) {
+    if (localStorage.getItem(key)) {
+        value = localStorage.getItem(key);
     }
     else {
-        scoreO = 0;
+        value = def;
     }
-    updateKeyAndObj('scoreO', scoreO, countOObj);
+    updateKeyAndObj(key, value, htmlObj);
+    return value;
+}
 
-    if (localStorage.getItem('scoreDraw')) {
-        scoreDraw = parseInt(localStorage.getItem('scoreDraw'), 10);
+function getIntFromStorageWithDefault(key, value, htmlObj, def) {
+    if (localStorage.getItem(key)) {
+        value = parseInt(localStorage.getItem(key), 10);
     }
     else {
-        scoreDraw = 0;
+        value = def;
     }
-    updateKeyAndObj('scoreDraw', scoreDraw, countforDraw);
-
+    updateKeyAndObj(key, value, htmlObj);
+    return value;
 }
 
 
