@@ -11,38 +11,49 @@ let tokenO = 'O';
 
 let boardObj = [];
 let playerBoard = [];
-let boardInPlay = true;
+let boardInPlay;
 
 let scoreX = 0;
 let scoreO = 0;
 let scoreDraw = 0;
 
-let countXObj;
-let countOObj;
-let countforDraw;
+let indicatorState;
+
+let playAgainButtonObj = document.querySelector('#playAgainButton');
+let resetButtonObj = document.querySelector('#resetButton');
+let customXObj = document.querySelector('#customX');
+let customOObj = document.querySelector('#customO');
+
+let titleXObj = document.querySelector('#titleforX');
+let titleOObj = document.querySelector('#titleforO');
+
+let countXObj = document.querySelector('#CountforX');
+let countOObj = document.querySelector('#CountforO');
+let countforDraw = document.querySelector('#CountforDraw');
 
 init();
 
 for (let i=0; i<NUMBER_OF_SQUARES; i++) {
-    boardObj[i] = document.querySelector(`#square${i}`);
-    boardObj[i].style.fontsize = '12pt';
     
     boardObj[i].addEventListener('click', () => {
+
         if (boardInPlay) {
             console.log(`Square ${i} has been clicked`);
             
             if (playerBoard[i] == '') {
                 playerBoard[i] = turn;
+                localStorage.setItem('sq' + i, playerBoard[i]);
                 boardObj[i].innerHTML = getToken();
 
                 if (isPlayerWinner(i)) {
-                    console.log(`The winner is: ${turn}`);
                     boardInPlay = false;
+                    localStorage.setItem('boardInPlay', boardInPlay);
                     indicateWinner();
                 }
                 else {
                     switchTurn();
- //                   localStorage.setItem(turnState, turn);
+                    localStorage.setItem('turn', turn);
+                    console.log(localStorage.getItem('turn'));
                 }
             }
 
@@ -50,6 +61,7 @@ for (let i=0; i<NUMBER_OF_SQUARES; i++) {
                 if (boardInPlay) {
                     console.log("There is NO winner");
                     turn = '';
+                    localStorage.setItem('turn', turn);
                     indicateNoWinner();
                 }
 
@@ -60,16 +72,56 @@ for (let i=0; i<NUMBER_OF_SQUARES; i++) {
     });
 }
 
-let playAgainButtonObj = document.querySelector('#playAgainButton');
-let customXObj = document.querySelector('#customX');
-let customOObj = document.querySelector('#customO');
-
-let titleXObj = document.querySelector('#TitleforX');
-let titleOObj = document.querySelector('#TitleforO');
-
 playAgainButtonObj.addEventListener('click', () => {
     console.log('Play Again Button clicked');
+    
+    for (let i=0; i<NUMBER_OF_SQUARES; i++) {
+        boardObj[i] = document.querySelector(`#square${i}`);
+        boardObj[i].style.fontsize = '12pt';
+        
+        playerBoard[i] = '';
+        boardObj[i].innerHTML = '';
+        localStorage.setItem('sq' + i, '');
+    }
+
+    initializeArray();
+    turn = 'X';
+    localStorage.setItem('turn', turn);
+    updateTurnIndicator();
+
+    boardInPlay = true;
+    localStorage.setItem('boardInPlay', boardInPlay);
+});
+
+
+resetButtonObj.addEventListener('click', () => {
+    console.log('Reset button clicked');
     init();
+
+    turn = 'X';
+    localStorage.setItem('turn', turn);
+    updateTurnIndicator();
+
+    for (let i=0; i<NUMBER_OF_SQUARES; i++) {
+        playerBoard[i] = '';
+        boardObj[i].innerHTML = '';
+        localStorage.setItem('sq' + i, '');
+    }
+
+    boardInPlay = true;
+    localStorage.setItem('boardInPlay', boardInPlay);
+
+    scoreX = 0;
+    localStorage.setItem('scoreX', scoreX);
+    countXObj.innerHTML = scoreX;
+
+    scoreO = 0;
+    localStorage.setItem('scoreO', scoreO);
+    countOObj.innerHTML = scoreO;
+
+    scoreDraw = 0;
+    localStorage.setItem('scoreDraw', scoreDraw);
+    countforDraw.innerHTML = scoreDraw;
 });
 
 customXObj.addEventListener('click', () => {
@@ -78,7 +130,7 @@ customXObj.addEventListener('click', () => {
     tokenX = answer;
     titleXObj.innerHTML = `Games Won By ${tokenX}: `;
     console.log(tokenX);
-    updateBoardWithNewToken();
+    refreshBoard();
 });
 
 customOObj.addEventListener('click', () => {
@@ -87,27 +139,83 @@ customOObj.addEventListener('click', () => {
     tokenO = answer;
     titleOObj.innerHTML = `Games Won By ${tokenO}: `;
     console.log(tokenO);
-    updateBoardWithNewToken();
+    refreshBoard();
     });
 
 
 function init() {
-    for (let i=0; i<playerBoard.length; i++) {
-        playerBoard[i] = '';
-        boardObj[i].innerHTML = '';
+    for (let i=0; i<NUMBER_OF_SQUARES; i++) {
+        boardObj[i] = document.querySelector(`#square${i}`);
+        boardObj[i].style.fontsize = '12pt';
+    }
+
+    turn = 'X';
+    if (localStorage.getItem('turn')) {
+        turn = localStorage.getItem('turn');
     }
 
     initializeArray();
-    turn = 'X';
-    updateTurnIndicator();
-    boardInPlay = true;
+    for (let i=0; i<playerBoard.length; i++) {
+        if (localStorage.getItem("sq" + i)) {
+            playerBoard[i] = localStorage.getItem("sq" + i);
+        }
+    }
+    refreshBoard();
+    
+    if (localStorage.getItem('boardInPlay') == 'true') {
+        boardInPlay = true;
+    }
+    else if (localStorage.getItem('boardInPlay') == 'false') {
+        boardInPlay = false;
+    }
+    else {
+        boardInPlay = true;
+    }
 
-    countXObj = document.querySelector('#CountforX');
-    countOObj = document.querySelector('#CountforO');
-    countforDraw = document.querySelector('#CountforDraw');
+    indicatorState = localStorage.getItem('indicatorState');
+    console.log(`indicatorState is ${indicatorState}`);
 
-//    turn = localStorage.get(turnState);
+    if (indicatorState == 'inPlay') {
+        updateTurnIndicator();
+    }
+    else if (indicatorState == 'win') {
+        updateWinnerIndicator();
+    }
+    else if (indicatorState == 'draw') {
+        updateNoWinnerIndicator();
+    }
+    else {
+        indicatorState == 'inPlay';
+        updateTurnIndicator();
+    }
+
+
+    if (localStorage.getItem('scoreX')) {
+        scoreX = parseInt(localStorage.getItem('scoreX'), 10);
+    }
+    else {
+        scoreX = 0;
+    }
+    updateScoreItem('scoreX', scoreX, countXObj);
+
+    if (localStorage.getItem('scoreO')) {
+        scoreO = parseInt(localStorage.getItem('scoreO'), 10);
+    }
+    else {
+        scoreO = 0;
+    }
+    updateScoreItem('scoreO', scoreO, countOObj);
+
+    if (localStorage.getItem('scoreDraw')) {
+        scoreDraw = parseInt(localStorage.getItem('scoreDraw'), 10);
+    }
+    else {
+        scoreDraw = 0;
+    }
+    updateScoreItem('scoreDraw', scoreDraw, countforDraw);
+
 }
+
 
 function getToken() {
     if (turn == 'X') {
@@ -119,7 +227,7 @@ function getToken() {
     }
 }
 
-function updateBoardWithNewToken() {
+function refreshBoard() {
     for (let i=0; i<playerBoard.length; i++) {
         if (playerBoard[i] == 'X') {
             boardObj[i].innerHTML = tokenX;
@@ -235,6 +343,7 @@ function isPlayerWinner(index) {
 function initializeArray() {
     for (let i=0; i<NUMBER_OF_SQUARES; i++) {
         playerBoard[i] = "";
+        localStorage.setItem(`square${i}`, playerBoard[i]);
     }
 }
 
@@ -242,9 +351,11 @@ function initializeArray() {
 function switchTurn() {
     if (turn == 'X') {
         turn = 'O';
+        localStorage.setItem('turn', turn);
     }
     else if (turn == 'O') {
         turn = 'X';
+        localStorage.setItem('turn', turn);
     }
 
     updateTurnIndicator();
@@ -252,21 +363,41 @@ function switchTurn() {
 
 function updateTurnIndicator() {
     let tokenName = getToken();
+    console.log(`Player's Turn: ${tokenName}`);
     turnIndicator.innerHTML = `Player's Turn: ${tokenName}`;
     turnIndicator.style.color = 'black';
+
+    indicatorState = 'inPlay';
+    localStorage.setItem('indicatorState', indicatorState);
 }
 
 function indicateWinner() {
+    updateWinnerIndicator();
+    updateScore();
+
+    indicatorState = 'win';
+    localStorage.setItem('indicatorState', indicatorState);
+}
+
+function updateWinnerIndicator() {
     let tokenName = getToken();
+    console.log(`The winner is: ${turn}`);
     turnIndicator.innerHTML = `Winner is: ${tokenName}!!!`;
     turnIndicator.style.color = 'green';
-    updateScore();
 }
 
 function indicateNoWinner() {
+    updateNoWinnerIndicator();
+    updateScore();
+
+    indicatorState = 'draw';
+    localStorage.setItem('indicatorState', indicatorState);
+}
+
+function updateNoWinnerIndicator() {
+    console.log(`The game is a DRAW`);
     turnIndicator.innerHTML = `Game is a DRAW - NO Winner`;
     turnIndicator.style.color = 'red';
-    updateScore();
 }
 
 function updateScore() {
@@ -274,14 +405,20 @@ function updateScore() {
 
     if (turn == 'X') {
         scoreX++;
-        countXObj.innerHTML = scoreX;
+        updateScoreItem('scoreX', scoreX, countXObj);
     }
     else if (turn == 'O') {
         scoreO++;
-        countOObj.innerHTML = scoreO;
+        updateScoreItem('scoreO', scoreO, countOObj);
     }
     else {
         scoreDraw++;
-        countforDraw.innerHTML = scoreDraw;
+        updateScoreItem('scoreDraw', scoreDraw, countforDraw);
     }
+}
+
+function updateScoreItem(tag, score, scoreObj) {
+    console.log('update score item');
+    localStorage.setItem(tag, score);
+    scoreObj.innerHTML = score;
 }
