@@ -177,6 +177,13 @@ button.customButton {
     background-color: red;
 }
 
+/* img {
+    width: 130px;
+    border: solid white 10px;
+    align-content: space-around;
+    border-radius: 10px;
+  } */
+
 @media screen and (max-width: 600px) {   
     div.scores {
         flex-direction: column;

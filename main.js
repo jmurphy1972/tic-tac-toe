@@ -31,6 +31,9 @@ let countXObj = document.querySelector('#CountforX');
 let countOObj = document.querySelector('#CountforO');
 let countforDraw = document.querySelector('#CountforDraw');
 
+// let imgObj = [];
+// let imgToken = document.querySelector('.imageLibrary');
+
 init();
 
 for (let i=0; i<NUMBER_OF_SQUARES; i++) {
@@ -44,6 +47,7 @@ for (let i=0; i<NUMBER_OF_SQUARES; i++) {
                 playerBoard[i] = turn;
                 localStorage.setItem('sq' + i, playerBoard[i]);
                 boardObj[i].innerHTML = getToken();
+//                imgObj[i].setAttribute('src', './enchanted.jpg');
 
                 if (isPlayerWinner(i)) {
                     boardInPlay = false;
@@ -75,53 +79,27 @@ for (let i=0; i<NUMBER_OF_SQUARES; i++) {
 playAgainButtonObj.addEventListener('click', () => {
     console.log('Play Again Button clicked');
     
-    for (let i=0; i<NUMBER_OF_SQUARES; i++) {
-        boardObj[i] = document.querySelector(`#square${i}`);
-        boardObj[i].style.fontsize = '12pt';
-        
-        playerBoard[i] = '';
-        boardObj[i].innerHTML = '';
-        localStorage.setItem('sq' + i, '');
-    }
-
-    initializeArray();
-    turn = 'X';
-    updateKey('turn', turn);
-    updateTurnIndicator();
-
-    boardInPlay = true;
-    updateKey('boardInPlay', boardInPlay);
+    initializeBoard();
 });
-
 
 resetButtonObj.addEventListener('click', () => {
     console.log('Reset button clicked');
 
-    turn = 'X';
-    updateKey('turn', turn);
-
-    for (let i=0; i<NUMBER_OF_SQUARES; i++) {
-        playerBoard[i] = '';
-        boardObj[i].innerHTML = '';
-        localStorage.setItem('sq' + i, '');
-    }
-
-    boardInPlay = true;
-    localStorage.setItem('boardInPlay', boardInPlay);
+    initializeBoard();
 
     scoreX = 0;
-    updateKeyAndObj('scoreX', scoreX, countXObj);
+    updateStorageAndHtmlObj('scoreX', scoreX, countXObj);
 
     scoreO = 0;
-    updateKeyAndObj('scoreO', scoreO, countOObj);
+    updateStorageAndHtmlObj('scoreO', scoreO, countOObj);
 
     scoreDraw = 0;
-    updateKeyAndObj('scoreDraw', scoreDraw, countforDraw);
+    updateStorageAndHtmlObj('scoreDraw', scoreDraw, countforDraw);
 
     tokenX = 'X';
-    updateKeyAndObj('tokenX', 'X', nameforX);
+    updateStorageAndHtmlObj('tokenX', 'X', nameforX);
     tokenO = 'O';
-    updateKeyAndObj('tokenO', 'O', nameforO);
+    updateStorageAndHtmlObj('tokenO', 'O', nameforO);
 
     updateTurnIndicator();
     refreshBoard();
@@ -152,6 +130,26 @@ customOObj.addEventListener('click', () => {
    }
 });
 
+
+function initializeBoard() {
+    for (let i=0; i<NUMBER_OF_SQUARES; i++) {
+        boardObj[i] = document.querySelector(`#square${i}`);
+        boardObj[i].style.fontsize = '12pt';
+        
+        playerBoard[i] = '';
+        updateStorage(`sq${i}`, playerBoard[i]);
+        updateStorageAndHtmlObj('sq' + i, '', boardObj[i]);
+
+    }
+
+    turn = 'X';
+    updateStorage('turn', turn);
+    updateTurnIndicator();
+
+    boardInPlay = true;
+    updateStorage('boardInPlay', boardInPlay);
+}
+
 function customToken(player, key, value, htmlObj) {
     let answer = prompt(`What is the ${player} token? (max 8 char) `);
     if (answer == null) {
@@ -159,7 +157,7 @@ function customToken(player, key, value, htmlObj) {
     }
 
     value = answer.substring(0, 8);
-    updateKeyAndObj(key, value, htmlObj);
+    updateStorageAndHtmlObj(key, value, htmlObj);
 
     return value;
 }
@@ -169,6 +167,8 @@ function init() {
     for (let i=0; i<NUMBER_OF_SQUARES; i++) {
         boardObj[i] = document.querySelector(`#square${i}`);
         boardObj[i].style.fontsize = '12pt';
+
+        // imgObj[i] = boardObj[i].querySelector('img');
     }
 
     if (localStorage.getItem('turn') == 'X') {
@@ -190,7 +190,7 @@ function init() {
         }
         else {
             playerBoard[i] = '';
-            updateKey(`sq${i}`, playerBoard[i]);
+            updateStorage(`sq${i}`, playerBoard[i]);
         }
     }
 
@@ -246,7 +246,7 @@ function getStringFromStorageWithDefault(key, value, htmlObj, def) {
     else {
         value = def;
     }
-    updateKeyAndObj(key, value, htmlObj);
+    updateStorageAndHtmlObj(key, value, htmlObj);
     return value;
 }
 
@@ -257,7 +257,7 @@ function getIntFromStorageWithDefault(key, value, htmlObj, def) {
     else {
         value = def;
     }
-    updateKeyAndObj(key, value, htmlObj);
+    updateStorageAndHtmlObj(key, value, htmlObj);
     return value;
 }
 
@@ -292,9 +292,6 @@ function isBoardFull() {
 }
 
 function isPlayerWinner(index) {
-    // let row = Math.floor(index/LENGTH_OF_SIDE);
-    // let col = index % LENGTH_OF_SIDE;
-    
     let winFlag;
 
     //check rows
@@ -384,22 +381,14 @@ function isPlayerWinner(index) {
 }
 
 
-function initializeArray() {
-    for (let i=0; i<NUMBER_OF_SQUARES; i++) {
-        playerBoard[i] = "";
-        updateKey(`sq${i}`, playerBoard[i]);
-    }
-}
-
-
 function switchTurn() {
     if (turn == 'X') {
         turn = 'O';
-        updateKey('turn', turn);
+        updateStorage('turn', turn);
     }
     else if (turn == 'O') {
         turn = 'X';
-        updateKey('turn', turn);
+        updateStorage('turn', turn);
     }
 
     updateTurnIndicator();
@@ -449,25 +438,25 @@ function updateScore() {
 
     if (turn == 'X') {
         scoreX++;
-        updateKeyAndObj('scoreX', scoreX, countXObj);
+        updateStorageAndHtmlObj('scoreX', scoreX, countXObj);
     }
     else if (turn == 'O') {
         scoreO++;
-        updateKeyAndObj('scoreO', scoreO, countOObj);
+        updateStorageAndHtmlObj('scoreO', scoreO, countOObj);
     }
     else {
         scoreDraw++;
-        updateKeyAndObj('scoreDraw', scoreDraw, countforDraw);
+        updateStorageAndHtmlObj('scoreDraw', scoreDraw, countforDraw);
     }
 }
 
-function updateKeyAndObj(key, value, htmlObj) {
+function updateStorageAndHtmlObj(key, value, htmlObj) {
     console.log(`update ${key} and ${value} on ${htmlObj}`);
     localStorage.setItem(key, value);
     htmlObj.innerHTML = value;
 }
 
-function updateKey(key, value) {
+function updateStorage(key, value) {
     console.log(`update ${key} and ${value}`);
     localStorage.setItem(key, value);
 }
