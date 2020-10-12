@@ -4,6 +4,7 @@ console.log('connected');
 
 let LENGTH_OF_SIDE = 3;
 let NUMBER_OF_SQUARES = LENGTH_OF_SIDE * LENGTH_OF_SIDE;
+let NUMBER_OF_TOKENS = 4;
 let turn;
 
 let tokenX = 'X';
@@ -23,6 +24,8 @@ let playAgainButtonObj = document.querySelector('#playAgainButton');
 let resetButtonObj = document.querySelector('#resetButton');
 let customXObj = document.querySelector('#customX');
 let customOObj = document.querySelector('#customO');
+let customXImgObj = document.querySelector('#customXimage');
+let customOImgObj = document.querySelector('#customOimage');
 
 let nameforX = document.querySelector('#nameforX');
 let nameforO = document.querySelector('#nameforO');
@@ -31,8 +34,12 @@ let countXObj = document.querySelector('#CountforX');
 let countOObj = document.querySelector('#CountforO');
 let countforDraw = document.querySelector('#CountforDraw');
 
-// let imgObj = [];
-// let imgToken = document.querySelector('.imageLibrary');
+let imgObj = [];
+let imgToken = [];
+let imageHeader = document.querySelector('#imageHeader');
+
+customXImgButtonPressed = false;
+customOImgButtonPressed = false;
 
 init();
 
@@ -46,17 +53,34 @@ for (let i=0; i<NUMBER_OF_SQUARES; i++) {
             if (playerBoard[i] == '') {
                 playerBoard[i] = turn;
                 localStorage.setItem('sq' + i, playerBoard[i]);
-                boardObj[i].innerHTML = getToken();
-//                imgObj[i].setAttribute('src', './enchanted.jpg');
+
+                if (turn == 'X') {
+                    if (tokenX.includes('.jpg')) {
+                        imgObj[i].src = getToken();
+                        location.reload();
+                    }
+                    else {
+                        boardObj[i].innerHTML = getToken();
+                    }
+                }
+                else {
+                    if (tokenO.includes('.jpg')) {
+                        imgObj[i].src = getToken();
+                        location.reload();
+                    }
+                    else {
+                        boardObj[i].innerHTML = getToken();
+                    }
+                }
 
                 if (isPlayerWinner(i)) {
                     boardInPlay = false;
-                    localStorage.setItem('boardInPlay', boardInPlay);
+                    updateStorage('boardInPlay', boardInPlay);
                     indicateWinner();
                 }
                 else {
                     switchTurn();
-                    localStorage.setItem('turn', turn);
+                    updateStorage('turn', turn);
                     console.log(localStorage.getItem('turn'));
                 }
             }
@@ -70,21 +94,41 @@ for (let i=0; i<NUMBER_OF_SQUARES; i++) {
                 }
 
                 boardInPlay = false;
+                updateStorage('boardInPlay', boardInPlay);
             }
 
         }
     });
 }
 
+
+for (let i=0; i<NUMBER_OF_TOKENS; i++) {
+    imgToken[i].addEventListener('click', () => {
+        if (customXImgButtonPressed) {
+            tokenX = imgToken[i].getAttribute('src');
+            updateStorage('tokenX', tokenX);
+            refreshBoard();
+            location.reload();
+            customXImgButtonPressed = false;
+        }
+        if (customOImgButtonPressed) {
+            tokenO = imgToken[i].getAttribute('src');
+            updateStorage('tokenO', tokenO);
+            refreshBoard();
+            location.reload();
+            customOImgButtonPressed = false;
+        }
+    });
+}
+
+
 playAgainButtonObj.addEventListener('click', () => {
     console.log('Play Again Button clicked');
-    
     initializeBoard();
 });
 
 resetButtonObj.addEventListener('click', () => {
     console.log('Reset button clicked');
-
     initializeBoard();
 
     scoreX = 0;
@@ -130,6 +174,67 @@ customOObj.addEventListener('click', () => {
    }
 });
 
+customXImgObj.addEventListener('click', () => {
+    console.log('customXImgObj button clicked');
+
+    if (!customOImgButtonPressed) {
+
+        if (customXImgButtonPressed) {
+            customXImgButtonPressed = false;
+        }
+        else {
+            customXImgButtonPressed = true;
+        }
+
+        for (let i=0; i<NUMBER_OF_TOKENS; i++) {
+            if (customXImgButtonPressed) {
+                imgToken[i].style.display = 'block';
+            }
+            else {
+                imgToken[i].style.display = 'none';
+            }
+        }
+        
+        if (customXImgButtonPressed == 'none') {
+            imageHeader.style.display = 'block';
+        }
+        else {
+            imageHeader.style.display = 'none';
+        }
+    }
+
+});
+
+customOImgObj.addEventListener('click', () => {
+    console.log('customXImgObj button clicked');
+
+    if (!customXImgButtonPressed) {
+
+        if (customOImgButtonPressed) {
+            customOImgButtonPressed = false;
+        }
+        else {
+            customOImgButtonPressed = true;
+        }
+        
+        for (let i=0; i<NUMBER_OF_TOKENS; i++) {
+            if (customOImgButtonPressed) {
+                imgToken[i].style.display = 'block';
+            }
+            else {
+                imgToken[i].style.display = 'none';
+            }
+        }
+        
+        if (customOImgButtonPressed == 'none') {
+            imageHeader.style.display = 'block';
+        }
+        else {
+            imageHeader.style.display = 'none';
+        }
+    }
+});
+
 
 function initializeBoard() {
     for (let i=0; i<NUMBER_OF_SQUARES; i++) {
@@ -168,8 +273,11 @@ function init() {
         boardObj[i] = document.querySelector(`#square${i}`);
         boardObj[i].style.fontsize = '12pt';
 
-        // imgObj[i] = boardObj[i].querySelector('img');
+        imgObj[i] = boardObj[i].querySelector('img');
     }
+
+    imgToken = document.querySelectorAll('img.imageLibraryEntry');
+
 
     if (localStorage.getItem('turn') == 'X') {
         turn = 'X';
@@ -274,10 +382,20 @@ function getToken() {
 function refreshBoard() {
     for (let i=0; i<playerBoard.length; i++) {
         if (playerBoard[i] == 'X') {
-            boardObj[i].innerHTML = tokenX;
+            if (!tokenX.includes('.jpg')) {
+                boardObj[i].innerHTML = tokenX;
+            }
+            else {
+                imgObj[i].src = tokenX;
+            }
         }
         else if (playerBoard[i] == 'O') {
-            boardObj[i].innerHTML = tokenO;
+            if (!tokenO.includes('.jpg')) {
+                boardObj[i].innerHTML = tokenO;
+            }
+            else {
+                imgObj[i].src = tokenO;
+            }
         }
     }
 }
@@ -416,7 +534,7 @@ function updateWinnerIndicator() {
     let tokenName = getToken();
     console.log(`The winner is: ${turn}`);
     turnIndicator.innerHTML = `Winner is: ${tokenName}!!!`;
-    turnIndicator.style.color = 'green';
+    turnIndicator.style.color = 'limegreen';
 }
 
 function indicateNoWinner() {

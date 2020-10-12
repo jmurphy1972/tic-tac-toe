@@ -32,31 +32,59 @@
     
     <section class="layout">
         <section class="row">
-            <div class="squareUL" id="square0"></div>
-            <div class="squareUC" id="square1"></div>
-            <div class="squareUR" id="square2"></div>
+            <div class="squareUL" id="square0">
+                <img/>
+            </div>
+            <div class="squareUC" id="square1">
+                <img/>
+            </div>
+            <div class="squareUR" id="square2">
+                <img/>
+            </div>
         </section>
         <section class="row">
-            <div class="squareCL" id="square3"></div>
-            <div class="squareCC" id="square4"></div>
-            <div class="squareCR" id="square5"></div>
+            <div class="squareCL" id="square3">
+                <img/>
+            </div>
+            <div class="squareCC" id="square4">
+                <img/>  
+            </div>          
+            <div class="squareCR" id="square5">
+                <img/>
+            </div>
         </section>
         <section class="row">
-            <div class="squareLL" id="square6"></div>
-            <div class="squareLC" id="square7"></div>
-            <div class="squareLR" id="square8"></div>
+            <div class="squareLL" id="square6">
+                <img/>
+            </div>           
+            <div class="squareLC" id="square7">
+                <img/>
+            </div>
+            <div class="squareLR" id="square8">
+                <img/>
+            </div>
         </section>
-
-        <!-- <section class="imageLibrary">
-            <img src="./enchanted.jpg">
-        </section> -->
 
         <section class = "buttons">
-            <button class="customButton" id="customX">Customize X Token</button>
+            <div class="customButtonPanel" id="customPanelX">
+                <button class="customButton" id="customX">Customize X Token Text</button>
+                <button class="customButton" id="customXimage">Select X Token Images</button>
+            </div>
             <button class="gameButton"id="playAgainButton">Play Again</button>
             <button class="gameButton"id="resetButton">Reset to Factory Settings</button>
-            <button class="customButton" id="customO">Customize O Token</button>
+            <div class="customButtonPanel" id="customPanelX">
+                <button class="customButton" id="customO">Customize O Token Text</button>
+                <button class="customButton" id="customOimage">Select O Token Images</button>
+            </div>
         </section>
+    </section>
+
+    <section class="imageLibrary">
+        <div id="imageHeader" style="display: none">Click Image to Use as Token:</div>
+        <img class = "imageLibraryEntry" src="EnchantedForest.jpg" style="display: none">
+        <img class = "imageLibraryEntry" src="StormTroopers.jpg" style="display: none">
+        <img class = "imageLibraryEntry" src="EarthFromMoon.jpg" style="display: none">
+        <img class = "imageLibraryEntry" src="Batman.jpg" style="display: none">
     </section>
 
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>

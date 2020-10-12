@@ -1,9 +1,18 @@
+header {
+    /* background-image: url('skyTicTacToe.jpg');
+    background-position: center center;
+    background-size: cover; */
+    background-color: whitesmoke;
+}
+
 h1 {
     text-align: center;
+    color: black
 }
 
 h2 {
     text-align: center;
+    color: black;
 }
 
 div.scores {
@@ -21,7 +30,7 @@ div.scorePair {
 
 div.scoreTitle {
     text-align: center;
-    color: blue;
+    color: royalblue;
 }
 
 div.scoreTitle {
@@ -29,17 +38,17 @@ div.scoreTitle {
 }
 
 div.scoreName {
-    color: blue;
+    color: royalblue;
 }
 
 div.scoreColon {
     margin: 0 5px 0 0;
-    color: blue;
+    color: royalblue;
 }
 
 div.score {
     text-align: center;
-    color: limegreen;
+    color: black;
     font-weight: bold;
 }
 
@@ -165,24 +174,46 @@ section.buttons {
 }
 
 button {
-    text-align: center;
     font-size: 16px;
 }
 
 button.gameButton {
     background-color: limegreen;
+    height: 30px;
 }
 
 button.customButton {
     background-color: red;
+    height: 30px;
+    margin-bottom: 10px;
 }
 
-/* img {
-    width: 130px;
-    border: solid white 10px;
+div.customButtonPanel {
+    display: flex;
+    flex-direction: column;
+}
+
+img {
+    width: 100px;
+    border: solid white 5px;
     align-content: space-around;
     border-radius: 10px;
-  } */
+  }
+
+img.imageLibraryEntry {
+    display: none;
+    width: 130px;
+}
+
+section.imageLibrary {
+    display: flex;
+    flex-direction: row;
+}
+
+div#imageHeader {
+    display: block;
+    margin-top: -20px;
+}
 
 @media screen and (max-width: 600px) {   
     div.scores {
