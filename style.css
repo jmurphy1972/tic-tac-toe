@@ -292,6 +292,14 @@ div#imageHeader {
         order: -1;
     }
 
+    button#customOimage {
+        order: -1;
+    }
+
+    button#customXimage {
+        order: -1;
+    }
+
     div#scoreGroupX {
         order: -1;
     }
@@ -310,5 +318,9 @@ div#imageHeader {
 
     section.layout {
         margin: 10px 0 0 0;
+    }
+
+    img.imageLibraryEntry {
+        max-width: 80px;
     }
 }
