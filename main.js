@@ -339,6 +339,10 @@ function initializeBoard() {
 
     boardInPlay = true;
     updateStorage('boardInPlay', boardInPlay);
+
+    for (let j=0; j < NUMBER_OF_SQUARES; j++) {
+        boardObj[j].style.color = 'black';
+    }
 }
 
 function customToken(player, key, value, htmlObj) {
@@ -517,7 +521,12 @@ function isPlayerWinner() {
         }
 
         if (winFlag) {
-            console.log(winFlag)
+            console.log(winFlag);
+
+            for (let j=i; j < (LENGTH_OF_SIDE + i); j++) {
+                boardObj[j].style.color = 'blue';
+            }
+
             return true;
         }
     }
@@ -540,7 +549,12 @@ function isPlayerWinner() {
         }
 
         if (winFlag) {
-            console.log(winFlag)
+            console.log(winFlag);
+
+            for (let j=i; j < NUMBER_OF_SQUARES; j+=LENGTH_OF_SIDE) {
+                boardObj[j].style.color = 'blue';
+            }
+
             return true;
         }
     }
@@ -562,7 +576,12 @@ function isPlayerWinner() {
     }
 
     if (winFlag) {
-        console.log(winFlag)
+        console.log(winFlag);
+
+        for (let j=0; j < NUMBER_OF_SQUARES; j+=LENGTH_OF_SIDE+1) {
+            boardObj[j].style.color = 'blue';
+        }
+
         return true;
     }
 
@@ -580,6 +599,14 @@ function isPlayerWinner() {
             winFlag = false;
         }
         i+=LENGTH_OF_SIDE-1;
+    }
+
+    if (winFlag) {
+        console.log(winFlag);
+
+        for (let j=LENGTH_OF_SIDE-1; j < NUMBER_OF_SQUARES-1; j+=LENGTH_OF_SIDE-1) {
+            boardObj[j].style.color = 'blue';
+        }
     }
 
     return winFlag;
