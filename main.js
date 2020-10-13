@@ -45,6 +45,8 @@ let aiButtonObj = document.querySelector('.aiButton');
 let aiText = document.querySelector('.aiMode');
 let aiMode = false;
 
+let winSound = new Audio("win.wav");
+
 init();
 
 for (let i=0; i<NUMBER_OF_SQUARES; i++) {
@@ -60,18 +62,18 @@ for (let i=0; i<NUMBER_OF_SQUARES; i++) {
 
                 if (turn == 'X') {
                     if (tokenX.includes('.jpg')) {
-                        imgObj[i].src = getToken();
+                        boardObj[i].innerHTML = `<img src="${getToken()}" />`;
                     }
                     else {
-                        boardObj[i].innerHTML = getToken();
+                        boardObj[i].innerText = getToken();
                     }
                 }
                 else {
                     if (tokenO.includes('.jpg')) {
-                        imgObj[i].src = getToken();
+                        boardObj[i].innerHTML = `<img src="${getToken()}" />`;
                     }
                     else {
-                        boardObj[i].innerHTML = getToken();
+                        boardObj[i].innerText = getToken();
                     }
                 }
 
@@ -101,10 +103,10 @@ for (let i=0; i<NUMBER_OF_SQUARES; i++) {
                             
                             if (tokenO.includes('.jpg')) {
                                 console.log(`space is ${j}`);
-                                imgObj[j].src = getToken();
+                                boardObj[j].innerHTML = `<img src="${getToken()}" />`;
                             }
                             else {
-                                boardObj[j].innerHTML = getToken();
+                                boardObj[j].innerText = getToken();
                             }
                         }
                         emptySquareCount++;
@@ -114,8 +116,6 @@ for (let i=0; i<NUMBER_OF_SQUARES; i++) {
                 checkPlayerWinner();
                 checkBoardFull();
             }
-
-            location.reload();
         }
     });
 }
@@ -128,15 +128,20 @@ for (let i=0; i<NUMBER_OF_TOKENS; i++) {
             updateStorage('tokenX', tokenX);
             refreshBoard();
             customXImgButtonPressed = false;
-            location.reload();
         }
         if (customOImgButtonPressed) {
             tokenO = imgToken[i].getAttribute('src');
             updateStorage('tokenO', tokenO);
             refreshBoard();
             customOImgButtonPressed = false;
-            location.reload();
         }
+
+        for (let i=0; i<NUMBER_OF_TOKENS; i++) {
+            imgToken[i].style.display = 'none';
+        }   
+        imageHeader.style.display = 'none';
+
+        init();
     });
 }
 
@@ -145,6 +150,7 @@ function checkPlayerWinner() {
         boardInPlay = false;
         updateStorage('boardInPlay', boardInPlay);
         indicateWinner();
+        winSound.play();
     }
     else {
         switchTurn();
@@ -167,27 +173,38 @@ function checkBoardFull() {
     }
 }
 
+function updateAIConsole() {
+    if (aiMode) {
+        aiText.innerHTML = 'The system is in AI mode';
+        aiText.style.color = 'red';
+    }
+    else {
+        aiText.innerHTML = 'The system is NOT in AI mode';
+        aiText.style.color = 'black';
+    }
+}
+
 
 playAgainButtonObj.addEventListener('click', () => {
     console.log('Play Again Button clicked');
     initializeBoard();
 });
 
+
 aiButtonObj.addEventListener('click', () => {
     console.log('AI Button clicked');
     
     if (aiMode) {
         aiMode = false;
-        aiText.innerHTML = 'The system is NOT in AI mode';
-        aiText.style.color = 'black';
+        updateAIConsole();
     }
     else {
         aiMode = true;
-        aiText.innerHTML = 'The system is in AI mode';
-        aiText.style.color = 'red';
+        updateAIConsole();
     }
     updateStorage('aiMode', aiMode);
 });
+
 
 resetButtonObj.addEventListener('click', () => {
     console.log('Reset button clicked');
@@ -195,15 +212,7 @@ resetButtonObj.addEventListener('click', () => {
 
     aiMode = false;
     updateStorage('aiMode', aiMode);
-
-    if (aiMode) {
-        aiText.innerHTML = 'The system is in AI mode';
-        aiText.style.color = 'red';
-    }
-    else {
-        aiText.innerHTML = 'The system is NOT in AI mode';
-        aiText.style.color = 'black';
-    }
+    updateAIConsole();
 
     scoreX = 0;
     updateStorageAndHtmlObj('scoreX', scoreX, countXObj);
@@ -253,6 +262,7 @@ customXImgObj.addEventListener('click', () => {
 
     if (!customOImgButtonPressed) {
 
+        // This code toggles the customXImgButtonPressed variable
         if (customXImgButtonPressed) {
             customXImgButtonPressed = false;
         }
@@ -260,6 +270,7 @@ customXImgObj.addEventListener('click', () => {
             customXImgButtonPressed = true;
         }
 
+        // This code toggles the image panel
         for (let i=0; i<NUMBER_OF_TOKENS; i++) {
             if (customXImgButtonPressed) {
                 imgToken[i].style.display = 'block';
@@ -267,9 +278,8 @@ customXImgObj.addEventListener('click', () => {
             else {
                 imgToken[i].style.display = 'none';
             }
-        }
-        
-        if (customXImgButtonPressed == 'none') {
+        }       
+        if (customXImgButtonPressed) {
             imageHeader.style.display = 'block';
         }
         else {
@@ -284,6 +294,7 @@ customOImgObj.addEventListener('click', () => {
 
     if (!customXImgButtonPressed) {
 
+        // This code toggles the customOImgButtonPressed variable
         if (customOImgButtonPressed) {
             customOImgButtonPressed = false;
         }
@@ -291,6 +302,7 @@ customOImgObj.addEventListener('click', () => {
             customOImgButtonPressed = true;
         }
         
+        // This code toggles the image panel
         for (let i=0; i<NUMBER_OF_TOKENS; i++) {
             if (customOImgButtonPressed) {
                 imgToken[i].style.display = 'block';
@@ -299,8 +311,7 @@ customOImgObj.addEventListener('click', () => {
                 imgToken[i].style.display = 'none';
             }
         }
-        
-        if (customOImgButtonPressed == 'none') {
+        if (customOImgButtonPressed) {
             imageHeader.style.display = 'block';
         }
         else {
@@ -352,14 +363,7 @@ function init() {
     imgToken = document.querySelectorAll('img.imageLibraryEntry');
 
     aiMode = getBooleanFromStorageWithDefault('aiMode', false);
-    if (aiMode) {
-        aiText.innerHTML = 'The system is in AI mode';
-        aiText.style.color = 'red';
-    }
-    else {
-        aiText.innerHTML = 'The system is NOT in AI mode';
-        aiText.style.color = 'black';
-    }
+    updateAIConsole();
 
     if (localStorage.getItem('turn') == 'X') {
         turn = 'X';
@@ -451,7 +455,6 @@ function getIntFromStorageWithDefault(key, value, htmlObj, def) {
     return value;
 }
 
-
 function getToken() {
     if (turn == 'X') {
         return tokenX;
@@ -465,18 +468,18 @@ function refreshBoard() {
     for (let i=0; i<playerBoard.length; i++) {
         if (playerBoard[i] == 'X') {
             if (!tokenX.includes('.jpg')) {
-                boardObj[i].innerHTML = tokenX;
+                boardObj[i].innerText = tokenX;
             }
             else {
-                imgObj[i].src = tokenX;
+                boardObj[i].innerHTML = `<img src="${tokenX}" />`;
             }
         }
         else if (playerBoard[i] == 'O') {
             if (!tokenO.includes('.jpg')) {
-                boardObj[i].innerHTML = tokenO;
+                boardObj[i].innerText = tokenO;
             }
             else {
-                imgObj[i].src = tokenO;
+                boardObj[i].innerHTML = `<img src="${tokenO}" />`;
             }
         }
     }
