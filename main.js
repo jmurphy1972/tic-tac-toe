@@ -41,6 +41,10 @@ let imageHeader = document.querySelector('#imageHeader');
 customXImgButtonPressed = false;
 customOImgButtonPressed = false;
 
+let aiButtonObj = document.querySelector('.aiButton');
+let aiText = document.querySelector('.aiMode');
+let aiMode = false;
+
 init();
 
 for (let i=0; i<NUMBER_OF_SQUARES; i++) {
@@ -57,7 +61,6 @@ for (let i=0; i<NUMBER_OF_SQUARES; i++) {
                 if (turn == 'X') {
                     if (tokenX.includes('.jpg')) {
                         imgObj[i].src = getToken();
-                        location.reload();
                     }
                     else {
                         boardObj[i].innerHTML = getToken();
@@ -66,37 +69,53 @@ for (let i=0; i<NUMBER_OF_SQUARES; i++) {
                 else {
                     if (tokenO.includes('.jpg')) {
                         imgObj[i].src = getToken();
-                        location.reload();
                     }
                     else {
                         boardObj[i].innerHTML = getToken();
                     }
                 }
 
-                if (isPlayerWinner(i)) {
-                    boardInPlay = false;
-                    updateStorage('boardInPlay', boardInPlay);
-                    indicateWinner();
-                }
-                else {
-                    switchTurn();
-                    updateStorage('turn', turn);
-                    console.log(localStorage.getItem('turn'));
-                }
+                checkPlayerWinner();
             }
 
-            if (isBoardFull()) {
-                if (boardInPlay) {
-                    console.log("There is NO winner");
-                    turn = '';
-                    localStorage.setItem('turn', turn);
-                    indicateNoWinner();
+            checkBoardFull();
+
+            // AI System
+            if ((aiMode) && (boardInPlay) && (turn == 'O')) {
+                let emptySquareCount = 0;
+                for (let j=0; j<NUMBER_OF_SQUARES; j++) {
+                    if (playerBoard[j] == '') {
+                        emptySquareCount++;
+                    }
+                }
+                console.log(`empty square count is ${emptySquareCount}`);
+
+                let aiMove = Math.floor(Math.random() * emptySquareCount);
+                emptySquareCount = 0;
+                for (let j=0; j<NUMBER_OF_SQUARES; j++) {
+                    if (playerBoard[j] == '') {
+                        if (emptySquareCount == aiMove) {
+                            console.log(`AI chooses ${j}`);
+                            playerBoard[j] = turn;
+                            localStorage.setItem('sq' + j, playerBoard[j]);
+                            
+                            if (tokenO.includes('.jpg')) {
+                                console.log(`space is ${j}`);
+                                imgObj[j].src = getToken();
+                            }
+                            else {
+                                boardObj[j].innerHTML = getToken();
+                            }
+                        }
+                        emptySquareCount++;
+                    }
                 }
 
-                boardInPlay = false;
-                updateStorage('boardInPlay', boardInPlay);
+                checkPlayerWinner();
+                checkBoardFull();
             }
 
+            location.reload();
         }
     });
 }
@@ -108,17 +127,44 @@ for (let i=0; i<NUMBER_OF_TOKENS; i++) {
             tokenX = imgToken[i].getAttribute('src');
             updateStorage('tokenX', tokenX);
             refreshBoard();
-            location.reload();
             customXImgButtonPressed = false;
+            location.reload();
         }
         if (customOImgButtonPressed) {
             tokenO = imgToken[i].getAttribute('src');
             updateStorage('tokenO', tokenO);
             refreshBoard();
-            location.reload();
             customOImgButtonPressed = false;
+            location.reload();
         }
     });
+}
+
+function checkPlayerWinner() {
+    if (isPlayerWinner()) {
+        boardInPlay = false;
+        updateStorage('boardInPlay', boardInPlay);
+        indicateWinner();
+    }
+    else {
+        switchTurn();
+        updateStorage('turn', turn);
+        console.log(localStorage.getItem('turn'));
+    }
+}
+
+function checkBoardFull() {
+    if (isBoardFull()) {
+        if (boardInPlay) {
+            console.log("There is NO winner");
+            turn = '';
+            localStorage.setItem('turn', turn);
+            indicateNoWinner();
+        }
+
+        boardInPlay = false;
+        updateStorage('boardInPlay', boardInPlay);
+    }
 }
 
 
@@ -127,9 +173,37 @@ playAgainButtonObj.addEventListener('click', () => {
     initializeBoard();
 });
 
+aiButtonObj.addEventListener('click', () => {
+    console.log('AI Button clicked');
+    
+    if (aiMode) {
+        aiMode = false;
+        aiText.innerHTML = 'The system is NOT in AI mode';
+        aiText.style.color = 'black';
+    }
+    else {
+        aiMode = true;
+        aiText.innerHTML = 'The system is in AI mode';
+        aiText.style.color = 'red';
+    }
+    updateStorage('aiMode', aiMode);
+});
+
 resetButtonObj.addEventListener('click', () => {
     console.log('Reset button clicked');
     initializeBoard();
+
+    aiMode = false;
+    updateStorage('aiMode', aiMode);
+
+    if (aiMode) {
+        aiText.innerHTML = 'The system is in AI mode';
+        aiText.style.color = 'red';
+    }
+    else {
+        aiText.innerHTML = 'The system is NOT in AI mode';
+        aiText.style.color = 'black';
+    }
 
     scoreX = 0;
     updateStorageAndHtmlObj('scoreX', scoreX, countXObj);
@@ -244,7 +318,6 @@ function initializeBoard() {
         playerBoard[i] = '';
         updateStorage(`sq${i}`, playerBoard[i]);
         updateStorageAndHtmlObj('sq' + i, '', boardObj[i]);
-
     }
 
     turn = 'X';
@@ -258,7 +331,7 @@ function initializeBoard() {
 function customToken(player, key, value, htmlObj) {
     let answer = prompt(`What is the ${player} token? (max 8 char) `);
     if (answer == null) {
-        answer = value;
+        return value;
     }
 
     value = answer.substring(0, 8);
@@ -278,6 +351,15 @@ function init() {
 
     imgToken = document.querySelectorAll('img.imageLibraryEntry');
 
+    aiMode = getBooleanFromStorageWithDefault('aiMode', false);
+    if (aiMode) {
+        aiText.innerHTML = 'The system is in AI mode';
+        aiText.style.color = 'red';
+    }
+    else {
+        aiText.innerHTML = 'The system is NOT in AI mode';
+        aiText.style.color = 'black';
+    }
 
     if (localStorage.getItem('turn') == 'X') {
         turn = 'X';
@@ -409,7 +491,7 @@ function isBoardFull() {
     return true;
 }
 
-function isPlayerWinner(index) {
+function isPlayerWinner() {
     let winFlag;
 
     //check rows

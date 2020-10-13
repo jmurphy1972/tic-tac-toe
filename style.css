@@ -166,6 +166,13 @@ div.squareLR {
     font-size: xx-large;
 }
 
+h3.aiMode {
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: -20px;
+    color: black
+}
+
 section.buttons {
     display: flex;
     flex-direction: row;
@@ -182,8 +189,13 @@ button.gameButton {
     height: 30px;
 }
 
+button.aiButton {
+    background-color: yellow;
+    height: 30px;
+}
+
 button.customButton {
-    background-color: red;
+    background-color: cyan;
     height: 30px;
     margin-bottom: 10px;
 }
@@ -191,6 +203,10 @@ button.customButton {
 div.customButtonPanel {
     display: flex;
     flex-direction: column;
+}
+
+button#resetButton {
+    background-color: red;
 }
 
 img {
