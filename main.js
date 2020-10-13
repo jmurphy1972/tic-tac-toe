@@ -145,6 +145,7 @@ for (let i=0; i<NUMBER_OF_TOKENS; i++) {
     });
 }
 
+// This function checks to see if there is a winner
 function checkPlayerWinner() {
     if (isPlayerWinner()) {
         boardInPlay = false;
@@ -159,6 +160,7 @@ function checkPlayerWinner() {
     }
 }
 
+// This function checks if the board is full
 function checkBoardFull() {
     if (isBoardFull()) {
         if (boardInPlay) {
