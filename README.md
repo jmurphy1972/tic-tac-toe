@@ -29,6 +29,7 @@ Here are the extra bonus user stories that were tackled in this project.
 
 
 Planning of the Core Game:
+
 In the first phase of the game, the goal was to get the basic tic-tac-toe game working.  For this, I started
 with the HTML structure of the game (i.e. head, body, header, etc.).  In the HTML I used 3 sets of 3 div tags
 in order to render the tic-tac-toe board.  I planned on using FlexBox in CSS to structure to set the horizontal
@@ -54,6 +55,7 @@ or a Draw State).  The In-Play state and the Winning state need to show which pl
 
 
 How To Solve for the Winner:
+
 I next created the algorithm for checking whether there is a winner.  The algorithm keeps track of the squares in an array called 
 playerBoard[].  The playerBoard[] array consists of only "X"s and "O"s.  The array starts numbering the squares at the upper-left
 moving to the right, and continuing with the left-most square on the row below it.  After a square listener registers a click event,
@@ -85,9 +87,12 @@ that has 4 squares on a side for a total of 16 squares, the algorithm to check a
 
 
 Bonus Features:
+
 After the planning of the core game, I moved onto the bonus features.
 
+
 Keep Track of Scores:
+
 I started with the tally mechanisms to keep track of successive wins for X, for O, and for games that come to a draw.  I used FlexBox
 to keep the four elements for each scoring element ("Games won by" text, name of either X or O, the colon, the number score) in a row.
 If a winner is encountered when one of the square listeners registers a click event, the turn is used to determine which player won
@@ -96,6 +101,7 @@ basic property of the tic-tac-toe game.
 
 
 Storage of Game State:
+
 I then implemented the storage mechanism to keep track of the game state if the browser is refreshed.  This means that the following
 elements of the game needed to be saved in the event of a browser refresh:
 
@@ -116,6 +122,7 @@ always run near the beginning of the program code before creating the Event List
 
 
 Customization of Tokens with Text:
+
 The feature where tokens could be customized was then implemented.  I used the variables of tokenX and tokenO to represent which text tokens
 have been set by the player.  The values of these variables are initialized with "X" and "O", but can be customized to any text token by the player.
 The player is restricted to 8 characters due to the size of a square on the board.  A prompt() is used when the button is clicked to determine the
@@ -127,6 +134,7 @@ or Draw State) and updates the message accordingly.  The code also updates the n
 
 
 Customizaton of Tokens with Images:
+
 This feature consists of two different parts.  The first part of this is the mechanism that allows each player to show the menu of images
 and select an image for their token on the game board.  The second part of this is the mechanism allows the user to use the selected image
 as their token on the game board.
@@ -135,7 +143,9 @@ NOTE: My initial thoughts were that I needed to implement the storage feature be
 the player upload an image of their choice.  After consulting on the issue, the game now shows pre-defined images that a player can select.
 I listed the ability to be able to upload a custom image to the game as a future feature to consider building.
 
+
 How Image Menu works in UI:
+
 As discussed above, the customization of tokens with images consists of two different parts.
 
 The first part consists of two different variables whose boolean values are controlled by two buttons on the game board.  One variable is
@@ -153,6 +163,7 @@ has a ".jpg" contained in the string.  If so, this indicates that an image token
 
 
 AI System:
+
 The AI system is implemented within the For-Loop that creates the listeners for the squares.  The AI system uses a global variable to check
 whether the AI system has been toggled to true or false.  A button on the display is used to control whether the AI system is turned on or off.  
 An HTML element in the display is used to show whether the AI system is turned on or off.  This message is changed whenever the global variable
@@ -165,6 +176,7 @@ As a future enhancement, a more sophisticated AI system can be considered that u
 
 
 Row, Column or Diagonal Changes Color for Winning Combination to Blue:
+
 When a winning condition is encountered, the row, column, or diagonal that has the winning combination changes to a blue color.
 This algorithm that determines the winning row, column, or diagonal is implemented inside the isPlayerWinner() algorithm that checks 
 for the winning state.  If a winning state is encountered, then that row, column, or diagonal with the winning state is then
@@ -181,6 +193,7 @@ section for unsolved problems for future iterations.  This feature was the last 
 
 
 Unsolved Problems for Future Iterations:
+
 Here are some unsolved problems that will be solved with future iterations of the code:
 
 	- The AI system selects an open square randomly.  A more intelligence AI system should be built that uses a Min-Max algorithm
